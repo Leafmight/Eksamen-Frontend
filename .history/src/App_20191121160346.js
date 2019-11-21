@@ -245,6 +245,7 @@ const Home = () => {
         <input type="date" />
         <button>Søg</button>
       </form>
+      <FlightData />
     </div>
   );
 };
@@ -277,15 +278,15 @@ const FlightData = () => {
           </tr>
         </thead>
         <tbody>
-          {flightInfo.map((flight, index) => {
+          {flightInfo.map(flight => {
             return (
-              <tr key={index}>
+              <tr>
                 <td>{flight.startDestination}</td>
                 <td>{flight.endDestination}</td>
                 <td>{flight.departure}</td>
                 <td>{flight.arrival}</td>
                 <td>{flight.duration} min</td>
-                <td>{flight.price} kr. </td>
+                <td>{flight.price}</td>
                 <td>
                   <a href={flight.deeplinkUrl}>Link</a>
                 </td>

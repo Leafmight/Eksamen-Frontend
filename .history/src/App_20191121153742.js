@@ -103,11 +103,6 @@ const HeaderStart = () => {
         </NavLink>
       </li>
       <li>
-        <NavLink activeClassName="active" to="/flightinfo">
-          FlightInfo
-        </NavLink>
-      </li>
-      <li>
         <NavLink activeClassName="active" to="/login">
           Login
         </NavLink>
@@ -126,9 +121,6 @@ const ContentStart = ({ login }) => {
       </Route>
       <Route path="/readme">
         <Readme />
-      </Route>
-      <Route path="/flightinfo">
-        <FlightData />
       </Route>
       <Route path="*">
         <NoMatch />
@@ -264,9 +256,10 @@ const FlightData = () => {
   return (
     <div>
       <h3>Flightdata</h3>
-      <table className="table">
+      <table>
         <thead>
           <tr>
+            <th>id</th>
             <th>Departure</th>
             <th>Destination</th>
             <th>Departure Time</th>
@@ -277,21 +270,7 @@ const FlightData = () => {
           </tr>
         </thead>
         <tbody>
-          {flightInfo.map((flight, index) => {
-            return (
-              <tr key={index}>
-                <td>{flight.startDestination}</td>
-                <td>{flight.endDestination}</td>
-                <td>{flight.departure}</td>
-                <td>{flight.arrival}</td>
-                <td>{flight.duration} min</td>
-                <td>{flight.price} kr. </td>
-                <td>
-                  <a href={flight.deeplinkUrl}>Link</a>
-                </td>
-              </tr>
-            );
-          })}
+          <tr>{facade.fetchFlightData()}</tr>
         </tbody>
       </table>
     </div>

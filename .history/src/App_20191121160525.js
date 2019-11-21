@@ -245,6 +245,7 @@ const Home = () => {
         <input type="date" />
         <button>Søg</button>
       </form>
+      <FlightData />
     </div>
   );
 };

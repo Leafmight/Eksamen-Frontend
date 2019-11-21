@@ -103,11 +103,6 @@ const HeaderStart = () => {
         </NavLink>
       </li>
       <li>
-        <NavLink activeClassName="active" to="/flightinfo">
-          FlightInfo
-        </NavLink>
-      </li>
-      <li>
         <NavLink activeClassName="active" to="/login">
           Login
         </NavLink>
@@ -126,9 +121,6 @@ const ContentStart = ({ login }) => {
       </Route>
       <Route path="/readme">
         <Readme />
-      </Route>
-      <Route path="/flightinfo">
-        <FlightData />
       </Route>
       <Route path="*">
         <NoMatch />
@@ -235,6 +227,53 @@ const Content = ({ logout }) => {
 };
 
 const Home = () => {
+  const FlightData = () => {
+    const [flightInfo, setFlightInfo] = useState([]);
+    useEffect(() => {
+      let didCancel = false;
+      facade.fetchFlightData().then(res => {
+        if (didCancel === false) {
+          setFlightInfo(res);
+        }
+      });
+      return () => {
+        didCancel = true;
+      };
+    }, []);
+    return (
+      <div>
+        <h3>Flightdata</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Departure</th>
+              <th>Destination</th>
+              <th>Departure Time</th>
+              <th>Arrival Time</th>
+              <th>Duration</th>
+              <th>Price</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            {flightInfo.map(flight => {
+              return (
+                <tr>
+                  <td>{flight.id}</td>
+                  <td>{flight.startDestination}</td>
+                  <td>{flight.endDestination}</td>
+                  <td>{flight.departure}</td>
+                  <td>{flight.price}</td>
+                  <td>{flight.deeplinkUrl}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
   return (
     <div>
       <h3>Welcome to home</h3>
@@ -243,60 +282,12 @@ const Home = () => {
         <input type="text" placeholder="Departure" />
         <input type="date" />
         <input type="date" />
-        <button>Søg</button>
+        <button onClick={flightData}>Søg</button>
       </form>
     </div>
   );
 };
-const FlightData = () => {
-  const [flightInfo, setFlightInfo] = useState([]);
-  useEffect(() => {
-    let didCancel = false;
-    facade.fetchFlightData().then(res => {
-      if (didCancel === false) {
-        setFlightInfo(res);
-      }
-    });
-    return () => {
-      didCancel = true;
-    };
-  }, []);
-  return (
-    <div>
-      <h3>Flightdata</h3>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Departure</th>
-            <th>Destination</th>
-            <th>Departure Time</th>
-            <th>Arrival Time</th>
-            <th>Duration</th>
-            <th>Price</th>
-            <th>Link</th>
-          </tr>
-        </thead>
-        <tbody>
-          {flightInfo.map((flight, index) => {
-            return (
-              <tr key={index}>
-                <td>{flight.startDestination}</td>
-                <td>{flight.endDestination}</td>
-                <td>{flight.departure}</td>
-                <td>{flight.arrival}</td>
-                <td>{flight.duration} min</td>
-                <td>{flight.price} kr. </td>
-                <td>
-                  <a href={flight.deeplinkUrl}>Link</a>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  );
-};
+
 const People = () => {
   const [dataFromServer, setDataFromServer] = useState("Fetching...");
   const [listPeople, setListPeople] = useState([]);
