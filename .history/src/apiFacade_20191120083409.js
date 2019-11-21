@@ -76,11 +76,12 @@ function apiFacade() {
         headers: {
           "x-rapidapi-host":
             "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-          "x-rapidapi-key": "1e16b498-3dfb-400b-8ecd-91d0f943a5a3",
+          "x-rapidapi-key":
+            "4dfa3d7cb0msh7701660655f1502p13c7cbjsn3a351650d218",
           "content-type": "application/x-www-form-urlencoded"
         },
         body: {
-          inboundDate: "2019-11-21",
+          inboundDate: "2019-09-10",
           cabinClass: "business",
           children: "0",
           infants: "0",
@@ -89,26 +90,8 @@ function apiFacade() {
           locale: "en-US",
           originPlace: "SFO-sky",
           destinationPlace: "LHR-sky",
-          outboundDate: "2019-11-22",
+          outboundDate: "2019-09-01",
           adults: "1"
-        }
-      }
-    )
-      .then(response => {
-        console.log(response);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-  const fetchNew = () => {
-    return fetch(
-      "https://apidojo-hipmunk-v1.p.rapidapi.com/flights/create-session?infants_lap=0&children=0&seniors=0&country=US&from0=SGN&to0=DAD&date0=Jan%2027%202019&pax=1&cabin=Coach",
-      {
-        method: "GET",
-        headers: {
-          "x-rapidapi-host": "apidojo-hipmunk-v1.p.rapidapi.com",
-          "x-rapidapi-key": "4dfa3d7cb0msh7701660655f1502p13c7cbjsn3a351650d218"
         }
       }
     )
@@ -128,8 +111,7 @@ function apiFacade() {
     logout,
     fetchData,
     fetchPeople,
-    getTokenInfo,
-    fetchStuff
+    getTokenInfo
   };
 }
 const facade = apiFacade();

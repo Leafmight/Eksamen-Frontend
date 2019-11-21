@@ -129,7 +129,7 @@ const ContentStart = ({ login }) => {
   );
 };
 const Header = () => {
-  if (facade.getTokenInfo().roles === "admin") {
+  if (facade.getRole() === "admin") {
     return (
       <ul className="header">
         <li>
@@ -159,8 +159,7 @@ const Header = () => {
         </li>
         <li style={{ float: "right" }}>
           <NavLink activeClassName="active" to="/user-info">
-            Hi! {facade.getTokenInfo().username} Role:{" "}
-            {facade.getTokenInfo().roles}
+            Hi! {facade.getUser().username} Role: {facade.getUser().roles}
           </NavLink>
         </li>
       </ul>
@@ -188,12 +187,6 @@ const Header = () => {
           Logout
         </NavLink>
       </li>
-      <li style={{ float: "right" }}>
-        <NavLink activeClassName="active" to="/user-info">
-          Hi! {facade.getTokenInfo().username} Role:{" "}
-          {facade.getTokenInfo().roles}
-        </NavLink>
-      </li>
     </ul>
   );
 };
@@ -215,9 +208,6 @@ const Content = ({ logout }) => {
       </Route>
       <Route path="/logout">
         <Logout logout={logout} />
-      </Route>
-      <Route path="/user-info">
-        <UserInfo />
       </Route>
       <Route path="*">
         <NoMatch />
@@ -247,7 +237,6 @@ const People = () => {
       if (didCancel === false) {
         setListPeople(res);
         console.log("Fetching complete");
-        facade.fetchStuff().then(res => console.log(res));
       }
     });
     return () => {

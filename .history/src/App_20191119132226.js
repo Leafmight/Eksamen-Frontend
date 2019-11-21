@@ -247,7 +247,6 @@ const People = () => {
       if (didCancel === false) {
         setListPeople(res);
         console.log("Fetching complete");
-        facade.fetchStuff().then(res => console.log(res));
       }
     });
     return () => {

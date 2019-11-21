@@ -1,17 +1,14 @@
-import "./App.css";
 import React, { useState, useEffect } from "react";
 import facade from "./apiFacade";
-import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 import {
-  Switch,
+  HashRouter as Router,
   Route,
-  useRouteMatch,
-  useParams,
-  Link,
-  Prompt,
   NavLink,
+  Switch,
   useHistory
 } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -24,7 +21,7 @@ function App() {
   };
   const login = (user, pass) => {
     facade.login(user, pass).then(res => setLoggedIn(true));
-    history.push("/");
+    history.push("/Home");
   };
 
   return (
@@ -39,53 +36,6 @@ function App() {
           <LoggedIn logout={logout} />
         </div>
       )}
-    </div>
-  );
-}
-
-function LogIn({ login }) {
-  const init = { username: "", password: "" };
-  const [loginCredentials, setLoginCredentials] = useState(init);
-
-  const performLogin = evt => {
-    evt.preventDefault();
-    login(loginCredentials.username, loginCredentials.password);
-  };
-  const onChange = evt => {
-    setLoginCredentials({
-      ...loginCredentials,
-      [evt.target.id]: evt.target.value
-    });
-  };
-
-  return (
-    <div>
-      <h2>Login</h2>
-      <form onChange={onChange}>
-        <input placeholder="User Name" id="username" />
-        <input placeholder="Password" id="password" />
-        <button onClick={performLogin}>Login</button>
-      </form>
-    </div>
-  );
-}
-const Logout = ({ logout }) => {
-  const handleLogout = () => {
-    logout();
-  };
-  return (
-    <div>
-      <h2>Logout</h2>
-      <button onClick={handleLogout}>Logout</button>
-    </div>
-  );
-};
-
-function LoggedIn({ logout }) {
-  return (
-    <div>
-      <Header />
-      <Content logout={logout} />
     </div>
   );
 }
@@ -120,7 +70,7 @@ const ContentStart = ({ login }) => {
         <LogIn login={login} />
       </Route>
       <Route path="/readme">
-        <Readme />
+        <ReadMe />
       </Route>
       <Route path="*">
         <NoMatch />
@@ -128,18 +78,48 @@ const ContentStart = ({ login }) => {
     </Switch>
   );
 };
+function LogIn({ login }) {
+  const init = { username: "", password: "" };
+  const [loginCredentials, setLoginCredentials] = useState(init);
+
+  const performLogin = evt => {
+    evt.preventDefault();
+    login(loginCredentials.username, loginCredentials.password);
+  };
+  const onChange = evt => {
+    setLoginCredentials({
+      ...loginCredentials,
+      [evt.target.id]: evt.target.value
+    });
+  };
+  return (
+    <div>
+      <h2>Login</h2>
+      <form onSubmit={performLogin} onChange={onChange}>
+        <input placeholder="User Name" id="username" />
+        <input placeholder="Password" id="password" />
+        <button>Login</button>
+      </form>
+    </div>
+  );
+}
+const LoggedIn = ({ logout }) => {
+  return (
+    <div>
+      <Router>
+        <Header />
+        <Content logout={logout} />
+      </Router>
+    </div>
+  );
+};
 const Header = () => {
   if (facade.getTokenInfo().roles === "admin") {
     return (
       <ul className="header">
         <li>
-          <NavLink exact activeClassName="active" to="/">
+          <NavLink activeClassName="active" to="/home">
             Home
-          </NavLink>
-        </li>
-        <li>
-          <NavLink activeClassName="active" to="/people">
-            People
           </NavLink>
         </li>
         <li>
@@ -148,18 +128,17 @@ const Header = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink activeClassName="active" to="/edit">
-            Edit
+          <NavLink activeClassName="active" to="/people">
+            People
           </NavLink>
         </li>
         <li>
-          <NavLink activeClassName="active" to="/logout">
-            Logout
+          <NavLink activeClassName="active" to="/log-out">
+            Log out
           </NavLink>
         </li>
         <li style={{ float: "right" }}>
-          <NavLink activeClassName="active" to="/user-info">
-            Hi! {facade.getTokenInfo().username} Role:{" "}
+          <NavLink activeClassName="active" to="/UserInfo">
             {facade.getTokenInfo().roles}
           </NavLink>
         </li>
@@ -169,54 +148,49 @@ const Header = () => {
   return (
     <ul className="header">
       <li>
-        <NavLink exact activeClassName="active" to="/">
+        <NavLink exact activeClassName="active" to="/home">
           Home
         </NavLink>
       </li>
-      <li>
-        <NavLink activeClassName="active" to="/people">
-          People
-        </NavLink>
-      </li>
+
       <li>
         <NavLink activeClassName="active" to="/readme">
           README
         </NavLink>
       </li>
+
       <li>
-        <NavLink activeClassName="active" to="/logout">
-          Logout
+        <NavLink activeClassName="active" to="/log-out">
+          Log out
         </NavLink>
       </li>
       <li style={{ float: "right" }}>
-        <NavLink activeClassName="active" to="/user-info">
-          Hi! {facade.getTokenInfo().username} Role:{" "}
+        <NavLink activeClassName="active" to="/UserInfo">
           {facade.getTokenInfo().roles}
         </NavLink>
       </li>
     </ul>
   );
 };
-
 const Content = ({ logout }) => {
   return (
     <Switch>
-      <Route exact path="/">
+      <Route path="/home">
         <Home />
       </Route>
       <Route path="/people">
         <People />
       </Route>
       <Route path="/readme">
-        <Readme />
+        <ReadMe />
       </Route>
-      <Route path="/edit">
-        <Edit />
+      <Route exact path="/">
+        <App />
       </Route>
-      <Route path="/logout">
+      <Route path="/log-out">
         <Logout logout={logout} />
       </Route>
-      <Route path="/user-info">
+      <Route path="/UserInfo">
         <UserInfo />
       </Route>
       <Route path="*">
@@ -226,39 +200,37 @@ const Content = ({ logout }) => {
   );
 };
 
-const Home = () => {
-  return (
-    <div>
-      <h3>Welcome to home</h3>
-    </div>
-  );
-};
-
-const People = () => {
+function Home() {
   const [dataFromServer, setDataFromServer] = useState("Fetching...");
-  const [listPeople, setListPeople] = useState([]);
 
   useEffect(() => {
     facade.fetchData().then(res => setDataFromServer(res.msg));
   }, []);
-  useEffect(() => {
-    let didCancel = false;
-    facade.fetchPeople().then(res => {
-      if (didCancel === false) {
-        setListPeople(res);
-        console.log("Fetching complete");
-        facade.fetchStuff().then(res => console.log(res));
-      }
-    });
-    return () => {
-      didCancel = true;
-    };
-  }, []);
+
   return (
     <div>
       <h2>Data Received from server</h2>
       <h3>{dataFromServer}</h3>
+    </div>
+  );
+}
+
+const People = () => {
+  const [listPeople, setListPeople] = useState([]);
+  useEffect(() => {
+    facade.fetchPeople().then(res => setListPeople(res));
+  }, []);
+  return (
+    <div>
+      <h2>People</h2>
       <p>{JSON.stringify(listPeople)}</p>
+      <PeopleData listPeople={listPeople} />
+    </div>
+  );
+};
+const PeopleData = ({ listPeople }) => {
+  return (
+    <div>
       <table className="table">
         <thead>
           <tr>
@@ -282,15 +254,7 @@ const People = () => {
     </div>
   );
 };
-
-const Edit = () => {
-  return (
-    <div>
-      <h3>Find and Edit</h3>
-    </div>
-  );
-};
-const Readme = () => {
+const ReadMe = () => {
   return (
     <div>
       <h1>Setup everything:</h1>
@@ -378,7 +342,13 @@ const Readme = () => {
     </div>
   );
 };
-
+const Logout = ({ logout }) => {
+  return (
+    <div>
+      <button onClick={logout}>Logout</button>
+    </div>
+  );
+};
 const UserInfo = () => {
   return (
     <div>
