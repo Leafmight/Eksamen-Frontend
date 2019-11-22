@@ -296,11 +296,11 @@ const FlightData = () => {
 const FindFlight = ({ flightinfo }) => {
   const [desti, setId] = useState("");
   const [state, setState] = useState({
-    destination: "",
     startDate: "",
-    cabinClass: "Economy",
+    cabinClass: "",
     departure: "",
-    adults: "1"
+    destination: "",
+    adults: ""
   });
 
   function handleFindFlight(event) {
@@ -312,37 +312,33 @@ const FindFlight = ({ flightinfo }) => {
   }
   function handleSubmit(event) {
     event.preventDefault();
-    const name = event.target.name;
-    const value = event.target.value;
     setState({
-      ...flightinfo, [name] : value
+      ...flightinfo.FindFlight(desti)
     });
-    facade.fetchFlightData1(state.startDate, state.cabinClass, state.departure, state.destination, state.adults);
   }
-  
 
   return (
     <div>
       <form>
-        <input type="text" name="departure" placeholder="Departure" onChange={handleFindFlight} />
-        <input type="text" name="destination" placeholder="Destination"onChange={handleFindFlight} />
-        <input type="date" name="startDate"  onChange={handleFindFlight} />
-        <input type="number" name="adults" placeholder="1" min="1" size="4"  onChange={handleFindFlight} />
-        <select name="cabinClass" onChange={handleFindFlight}>
-          <option value="Economy">
+        <input type="date" name="startDate" placeholder="Destination" onChange={handleFindFlight} />
+        <select>
+          <option>
             Economy
           </option>
-          <option value="Premium Economy">
+          <option>
             Premium Economy
           </option>
-          <option value="Business">
+          <option>
             Business
           </option>
-          <option value="First Class">
+          <option>
             First Class
           </option>
         </select>
-        <button onClick={handleSubmit}>Søg</button>
+        <input type="text" name="departure" placeholder="Departure" onChange={handleFindFlight} />
+        <input type="date" name="startDate" onChange={handleFindFlight} />
+        <input type="date" name="EndDate" onChange={handleFindFlight} />
+        <button onClick={facade.fetchFlightData1}>Søg</button>
       </form>
       <div>
 
@@ -351,6 +347,44 @@ const FindFlight = ({ flightinfo }) => {
   )
 }
 
+const searchedFlight = ({ fetchFlightData1 }) => {
+
+  return (
+    <div>
+      <h2>Flight info</h2>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Departure</th>
+            <th>Destination</th>
+            <th>Departure Time</th>
+            <th>Arrival Time</th>
+            <th>Duration</th>
+            <th>Price</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          {fetchFlightData1.map((flight, index) => {
+            return (
+              <tr key={index}>
+                <td>{flight.startDestination}</td>
+                <td>{flight.endDestination}</td>
+                <td>{flight.departure}</td>
+                <td>{flight.arrival}</td>
+                <td>{flight.duration} min</td>
+                <td>{flight.price} kr. </td>
+                <td>
+                  <a href={flight.deeplinkUrl} target="_blank">Link</a>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  )
+}
 
 
 const People = () => {

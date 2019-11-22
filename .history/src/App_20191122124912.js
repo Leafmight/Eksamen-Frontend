@@ -294,64 +294,43 @@ const FlightData = () => {
 };
 
 const FindFlight = ({ flightinfo }) => {
-  const [desti, setId] = useState("");
+  const [id, setId] = useState("");
   const [state, setState] = useState({
     destination: "",
-    startDate: "",
-    cabinClass: "Economy",
     departure: "",
-    adults: "1"
+    startDate: "",
+    endDate: ""
   });
 
   function handleFindFlight(event) {
     const value = event.target.value;
     setState({
       ...state,
-      [event.target.name]: value
+      [event.target.destination]: value,
+      [event.target.departure]: value,
+
     })
+
+    return (
+      <div>
+        <form>
+          <input type="text" placeholder="Destination" id="desti" onChange={handleFindFlight} />
+          <input type="text" placeholder="Departure" id="depart" onChange={handleFindFlight} />
+          <input type="date" id="dateS" onChange={handleFindFlight} />
+          <input type="date" id="dateE" onChange={handleFindFlight} />
+          <button onClick={handleSubmit}>Søg</button>
+        </form>
+      </div>
+    )
   }
+
   function handleSubmit(event) {
     event.preventDefault();
-    const name = event.target.name;
-    const value = event.target.value;
     setState({
-      ...flightinfo, [name] : value
+      ...flightinfo.FindFlight(id)
     });
-    facade.fetchFlightData1(state.startDate, state.cabinClass, state.departure, state.destination, state.adults);
   }
-  
-
-  return (
-    <div>
-      <form>
-        <input type="text" name="departure" placeholder="Departure" onChange={handleFindFlight} />
-        <input type="text" name="destination" placeholder="Destination"onChange={handleFindFlight} />
-        <input type="date" name="startDate"  onChange={handleFindFlight} />
-        <input type="number" name="adults" placeholder="1" min="1" size="4"  onChange={handleFindFlight} />
-        <select name="cabinClass" onChange={handleFindFlight}>
-          <option value="Economy">
-            Economy
-          </option>
-          <option value="Premium Economy">
-            Premium Economy
-          </option>
-          <option value="Business">
-            Business
-          </option>
-          <option value="First Class">
-            First Class
-          </option>
-        </select>
-        <button onClick={handleSubmit}>Søg</button>
-      </form>
-      <div>
-
-      </div>
-    </div>
-  )
 }
-
-
 
 const People = () => {
   const [dataFromServer, setDataFromServer] = useState("Fetching...");

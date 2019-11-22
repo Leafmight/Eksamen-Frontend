@@ -298,9 +298,9 @@ const FindFlight = ({ flightinfo }) => {
   const [state, setState] = useState({
     destination: "",
     startDate: "",
-    cabinClass: "Economy",
+    cabinClass: "",
     departure: "",
-    adults: "1"
+    adults: ""
   });
 
   function handleFindFlight(event) {
@@ -317,7 +317,7 @@ const FindFlight = ({ flightinfo }) => {
     setState({
       ...flightinfo, [name] : value
     });
-    facade.fetchFlightData1(state.startDate, state.cabinClass, state.departure, state.destination, state.adults);
+    facade.fetchFlightData1(state.departure, state.destination, state.startDate, state.adults);
   }
   
 
@@ -328,17 +328,17 @@ const FindFlight = ({ flightinfo }) => {
         <input type="text" name="destination" placeholder="Destination"onChange={handleFindFlight} />
         <input type="date" name="startDate"  onChange={handleFindFlight} />
         <input type="number" name="adults" placeholder="1" min="1" size="4"  onChange={handleFindFlight} />
-        <select name="cabinClass" onChange={handleFindFlight}>
-          <option value="Economy">
+        <select name="cabinClass">
+          <option>
             Economy
           </option>
-          <option value="Premium Economy">
+          <option>
             Premium Economy
           </option>
-          <option value="Business">
+          <option>
             Business
           </option>
-          <option value="First Class">
+          <option>
             First Class
           </option>
         </select>
@@ -350,7 +350,6 @@ const FindFlight = ({ flightinfo }) => {
     </div>
   )
 }
-
 
 
 const People = () => {

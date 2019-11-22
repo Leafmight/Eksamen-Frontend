@@ -298,9 +298,9 @@ const FindFlight = ({ flightinfo }) => {
   const [state, setState] = useState({
     destination: "",
     startDate: "",
-    cabinClass: "Economy",
+    cabinClass: "",
     departure: "",
-    adults: "1"
+    adults: ""
   });
 
   function handleFindFlight(event) {
@@ -317,6 +317,7 @@ const FindFlight = ({ flightinfo }) => {
     setState({
       ...flightinfo, [name] : value
     });
+    console.log(state);
     facade.fetchFlightData1(state.startDate, state.cabinClass, state.departure, state.destination, state.adults);
   }
   
@@ -350,7 +351,6 @@ const FindFlight = ({ flightinfo }) => {
     </div>
   )
 }
-
 
 
 const People = () => {

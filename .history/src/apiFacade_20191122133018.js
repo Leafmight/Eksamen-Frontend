@@ -144,8 +144,7 @@ function apiFacade() {
     fetchPeople,
     getTokenInfo,
     fetchStuff,
-    fetchFlightData,
-    fetchFlightData1
+    fetchFlightData
   };
 }
 const facade = apiFacade();

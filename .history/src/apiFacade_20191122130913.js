@@ -74,14 +74,13 @@ function apiFacade() {
       options
     ).then(handleHttpErrors);
   };
-  const fetchFlightData1 = (startDate, cabinClass, departure, destination, adults) => {
+  const fetchFlightData1 = (destination, departure, startDate, EndDate) => {
     const options = makeOptions("GET", true); //True add's the token
     return fetch(
-      "http://localhost:8080/securitystarter/api/info/flightdata/ " + startDate + "/" + cabinClass + "/" + departure + "/" + destination + "/" + adults,
+      "http://localhost:8080/securitystarter/api/info/flightdata/ " + destination + "/" + departure + "/" + startDate + "/" + EndDate,
       options
     ).then(handleHttpErrors);
   };
-
   const fetchStuff = () => {
     return fetch(
       "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0",
@@ -144,8 +143,7 @@ function apiFacade() {
     fetchPeople,
     getTokenInfo,
     fetchStuff,
-    fetchFlightData,
-    fetchFlightData1
+    fetchFlightData
   };
 }
 const facade = apiFacade();

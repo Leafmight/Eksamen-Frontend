@@ -35,10 +35,10 @@ function App() {
           <ContentStart login={login} />
         </div>
       ) : (
-          <div>
-            <LoggedIn logout={logout} />
-          </div>
-        )}
+        <div>
+          <LoggedIn logout={logout} />
+        </div>
+      )}
     </div>
   );
 }
@@ -115,7 +115,7 @@ const HeaderStart = () => {
     </ul>
   );
 };
-const ContentStart = ({ login, props }) => {
+const ContentStart = ({ login }) => {
   return (
     <Switch>
       <Route exact path="/">
@@ -238,11 +238,16 @@ const Home = () => {
   return (
     <div>
       <h3>Welcome to home</h3>
-      <FindFlight />
+      <form>
+        <input type="text" placeholder="Destination" />
+        <input type="text" placeholder="Departure" />
+        <input type="date" />
+        <input type="date" />
+        <button>Søg</button>
+      </form>
     </div>
   );
 };
-
 const FlightData = () => {
   const [flightInfo, setFlightInfo] = useState([]);
   useEffect(() => {
@@ -292,67 +297,6 @@ const FlightData = () => {
     </div>
   );
 };
-
-const FindFlight = ({ flightinfo }) => {
-  const [desti, setId] = useState("");
-  const [state, setState] = useState({
-    destination: "",
-    startDate: "",
-    cabinClass: "Economy",
-    departure: "",
-    adults: "1"
-  });
-
-  function handleFindFlight(event) {
-    const value = event.target.value;
-    setState({
-      ...state,
-      [event.target.name]: value
-    })
-  }
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.name;
-    const value = event.target.value;
-    setState({
-      ...flightinfo, [name] : value
-    });
-    facade.fetchFlightData1(state.startDate, state.cabinClass, state.departure, state.destination, state.adults);
-  }
-  
-
-  return (
-    <div>
-      <form>
-        <input type="text" name="departure" placeholder="Departure" onChange={handleFindFlight} />
-        <input type="text" name="destination" placeholder="Destination"onChange={handleFindFlight} />
-        <input type="date" name="startDate"  onChange={handleFindFlight} />
-        <input type="number" name="adults" placeholder="1" min="1" size="4"  onChange={handleFindFlight} />
-        <select name="cabinClass" onChange={handleFindFlight}>
-          <option value="Economy">
-            Economy
-          </option>
-          <option value="Premium Economy">
-            Premium Economy
-          </option>
-          <option value="Business">
-            Business
-          </option>
-          <option value="First Class">
-            First Class
-          </option>
-        </select>
-        <button onClick={handleSubmit}>Søg</button>
-      </form>
-      <div>
-
-      </div>
-    </div>
-  )
-}
-
-
-
 const People = () => {
   const [dataFromServer, setDataFromServer] = useState("Fetching...");
   const [listPeople, setListPeople] = useState([]);
