@@ -12,7 +12,7 @@ import {
   NavLink,
   useHistory
 } from "react-router-dom";
-
+import moment from 'react-moment'
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   let history = useHistory();
@@ -294,9 +294,11 @@ const FlightData = () => {
 };
 
 const FindFlight = ({ flightinfo }) => {
+  const [desti, setId] = useState("");
+  var date = new Date();
   const [state, setState] = useState({
-    startDate: "",
-    cabinClass: "economy",
+    startDate: date.toLocalFormat('%y-%m-%d'),
+    cabinClass: "Economy",
     destination: "",
     adults: "1"
   });
@@ -310,7 +312,6 @@ const FindFlight = ({ flightinfo }) => {
       [event.target.name]: value
     })
   }
-
   function handleSubmit(event) {
     event.preventDefault();
     const name = event.target.name;
@@ -319,16 +320,15 @@ const FindFlight = ({ flightinfo }) => {
       ...flightinfo, [name]: value
     });
     console.log(state);
-    state.startDate.split("-").reverse().join("-")
     facade.fetchFlightData1(state.startDate, state.cabinClass, state.destination, state.adults);
   }
 
   return (
     <div>
       <form>
+        { /*<input type="text" name="departure" placeholder="Departure" onChange={handleFindFlight} />*/}
         <input type="text" name="destination" placeholder="Destination" onChange={handleFindFlight} />
         <input type="date" name="startDate" onChange={handleFindFlight}  required />
-        <input type="text" name="endDestination" placeholder="Departure" onChange={handleFindFlight}/>
         <input type="number" name="adults" placeholder="1" min="1" size="4" onChange={handleFindFlight}  />
         <select name="cabinClass" onChange={handleFindFlight}>
           <option value="economy">

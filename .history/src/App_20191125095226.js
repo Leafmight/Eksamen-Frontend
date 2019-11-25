@@ -295,13 +295,12 @@ const FlightData = () => {
 
 const FindFlight = ({ flightinfo }) => {
   const [state, setState] = useState({
-    startDate: "",
-    cabinClass: "economy",
     destination: "",
+    startDate: "",
+    cabinClass: "Economy",
+    departure: "",
     adults: "1"
   });
-
-
 
   function handleFindFlight(event) {
     const value = event.target.value;
@@ -310,7 +309,6 @@ const FindFlight = ({ flightinfo }) => {
       [event.target.name]: value
     })
   }
-
   function handleSubmit(event) {
     event.preventDefault();
     const name = event.target.name;
@@ -318,36 +316,64 @@ const FindFlight = ({ flightinfo }) => {
     setState({
       ...flightinfo, [name]: value
     });
-    console.log(state);
-    state.startDate.split("-").reverse().join("-")
-    facade.fetchFlightData1(state.startDate, state.cabinClass, state.destination, state.adults);
+    facade.fetchFlightData1(state.startDate, state.cabinClass, state.departure, state.destination, state.adults);
   }
+
 
   return (
     <div>
       <form>
+        <input type="text" name="departure" placeholder="Departure" onChange={handleFindFlight} />
         <input type="text" name="destination" placeholder="Destination" onChange={handleFindFlight} />
-        <input type="date" name="startDate" onChange={handleFindFlight}  required />
-        <input type="text" name="endDestination" placeholder="Departure" onChange={handleFindFlight}/>
-        <input type="number" name="adults" placeholder="1" min="1" size="4" onChange={handleFindFlight}  />
+        <input type="date" name="startDate" onChange={handleFindFlight} />
+        <input type="number" name="adults" placeholder="1" min="1" size="4" onChange={handleFindFlight} />
         <select name="cabinClass" onChange={handleFindFlight}>
-          <option value="economy">
+          <option value="Economy">
             Economy
           </option>
-          <option value="premiumeconomy">
+          <option value="Premium Economy">
             Premium Economy
           </option>
-          <option value="business">
+          <option value="Business">
             Business
           </option>
-          <option value="first">
+          <option value="First Class">
             First Class
           </option>
         </select>
         <button onClick={handleSubmit}>Søg</button>
       </form>
       <div>
-
+        <h3>Flightdata</h3>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Departure</th>
+              <th>Destination</th>
+              <th>Departure Time</th>
+              <th>Arrival Time</th>
+              <th>Duration</th>
+              <th>Price</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody>
+  {/*{flightInfo.map((flight, index) => {*/}
+              
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <a href="" target="_blank">Link</a>
+                  </td>
+                </tr>
+              
+          </tbody>
+        </table>
       </div>
     </div>
   )

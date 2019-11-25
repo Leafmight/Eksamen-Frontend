@@ -294,13 +294,19 @@ const FlightData = () => {
 };
 
 const FindFlight = ({ flightinfo }) => {
+  const [desti, setId] = useState("");
   const [state, setState] = useState({
     startDate: "",
-    cabinClass: "economy",
+    cabinClass: "Economy",
     destination: "",
     adults: "1"
   });
 
+  function toJSONLocal (date){
+    var local = new Date (date);
+    local.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+    return local.toJSON.slice(0,10);
+  }
 
 
   function handleFindFlight(event) {
@@ -310,7 +316,6 @@ const FindFlight = ({ flightinfo }) => {
       [event.target.name]: value
     })
   }
-
   function handleSubmit(event) {
     event.preventDefault();
     const name = event.target.name;
@@ -319,17 +324,16 @@ const FindFlight = ({ flightinfo }) => {
       ...flightinfo, [name]: value
     });
     console.log(state);
-    state.startDate.split("-").reverse().join("-")
     facade.fetchFlightData1(state.startDate, state.cabinClass, state.destination, state.adults);
   }
 
   return (
     <div>
       <form>
+        { /*<input type="text" name="departure" placeholder="Departure" onChange={handleFindFlight} />*/}
         <input type="text" name="destination" placeholder="Destination" onChange={handleFindFlight} />
-        <input type="date" name="startDate" onChange={handleFindFlight}  required />
-        <input type="text" name="endDestination" placeholder="Departure" onChange={handleFindFlight}/>
-        <input type="number" name="adults" placeholder="1" min="1" size="4" onChange={handleFindFlight}  />
+        <input type="date" name="startDate" onChange={handleFindFlight} required/>
+      <input type="number" name="adults" placeholder="1" min="1" size="4" onChange={handleFindFlight} value={toJSONLocal(date)}/>  
         <select name="cabinClass" onChange={handleFindFlight}>
           <option value="economy">
             Economy

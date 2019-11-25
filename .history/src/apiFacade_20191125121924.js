@@ -74,10 +74,10 @@ function apiFacade() {
       options
     ).then(handleHttpErrors);
   };
-  const fetchFlightData1 = (startDate, cabinClass, endDestination, destination, adults) => {
+  const fetchFlightData1 = (startDate, cabinClass, origin, destination, adults) => {
     const options = makeOptions("GET", true); //True add's the token
     return fetch(
-      "http://localhost:8080/securitystarter/api/info/flightdata/" + startDate + "/" + cabinClass + "/" + endDestination + "/" + destination + "/" + adults,
+      "http://localhost:8080/securitystarter/api/info/flightdata/" + startDate + "/" + cabinClass + "/" + origin + "/" + destination + "/" + adults,
       options
     ).then(handleHttpErrors);
   };

@@ -294,14 +294,14 @@ const FlightData = () => {
 };
 
 const FindFlight = ({ flightinfo }) => {
+  const [desti, setId] = useState("");
   const [state, setState] = useState({
     startDate: "",
-    cabinClass: "economy",
+    cabinClass: "Economy",
+    departure: "",
     destination: "",
     adults: "1"
   });
-
-
 
   function handleFindFlight(event) {
     const value = event.target.value;
@@ -310,26 +310,25 @@ const FindFlight = ({ flightinfo }) => {
       [event.target.name]: value
     })
   }
-
   function handleSubmit(event) {
     event.preventDefault();
     const name = event.target.name;
     const value = event.target.value;
     setState({
-      ...flightinfo, [name]: value
+      ...flightinfo, [name] : value
     });
     console.log(state);
-    state.startDate.split("-").reverse().join("-")
     facade.fetchFlightData1(state.startDate, state.cabinClass, state.destination, state.adults);
   }
+  
 
   return (
     <div>
       <form>
-        <input type="text" name="destination" placeholder="Destination" onChange={handleFindFlight} />
-        <input type="date" name="startDate" onChange={handleFindFlight}  required />
-        <input type="text" name="endDestination" placeholder="Departure" onChange={handleFindFlight}/>
-        <input type="number" name="adults" placeholder="1" min="1" size="4" onChange={handleFindFlight}  />
+       { /*<input type="text" name="departure" placeholder="Departure" onChange={handleFindFlight} />*/}
+        <input type="text" name="destination" placeholder="Destination"onChange={handleFindFlight} />
+        <input type="date" name="startDate"  onChange={handleFindFlight} />
+        <input type="number" name="adults" placeholder="1" min="1" size="4"  onChange={handleFindFlight} />
         <select name="cabinClass" onChange={handleFindFlight}>
           <option value="economy">
             Economy
