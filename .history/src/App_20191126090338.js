@@ -2,7 +2,16 @@ import "./App.css";
 import React, { useState, useEffect } from "react";
 import facade from "./apiFacade";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Switch, Route, NavLink, useHistory } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  useRouteMatch,
+  useParams,
+  Link,
+  Prompt,
+  NavLink,
+  useHistory
+} from "react-router-dom";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -311,22 +320,18 @@ const FindFlight = ({ flightinfo }) => {
       ...flightinfo,
       [name]: value
     });
-    console.log("State of input: ", state);
+    console.log(state);
     state.startDate
       .split("-")
       .reverse()
       .join("-");
-    facade
-      .fetchFlightData1(
-        state.startDate,
-        state.cabinClass,
-        state.arrival,
-        state.destination,
-        state.adults
-      )
-      .then(res => {
-        console.log("result: ", res);
-      });
+    facade.fetchFlightData1(
+      state.startDate,
+      state.cabinClass,
+      state.arrival,
+      state.destination,
+      state.adults
+    );
   }
 
   return (

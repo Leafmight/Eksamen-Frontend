@@ -287,13 +287,14 @@ const FlightData = () => {
 };
 
 const FindFlight = ({ flightinfo }) => {
-  const [state, setState] = useState({
+  const initial = {
     startDate: "",
     cabinClass: "economy",
     destination: "",
     adults: "1",
     arrival: ""
-  });
+  };
+  const [state, setState] = useState();
 
   function handleFindFlight(event) {
     const value = event.target.value;

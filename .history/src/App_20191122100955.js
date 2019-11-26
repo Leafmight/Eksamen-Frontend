@@ -2,7 +2,16 @@ import "./App.css";
 import React, { useState, useEffect } from "react";
 import facade from "./apiFacade";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Switch, Route, NavLink, useHistory } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  useRouteMatch,
+  useParams,
+  Link,
+  Prompt,
+  NavLink,
+  useHistory
+} from "react-router-dom";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -106,7 +115,7 @@ const HeaderStart = () => {
     </ul>
   );
 };
-const ContentStart = ({ login, props }) => {
+const ContentStart = ({ login }) => {
   return (
     <Switch>
       <Route exact path="/">
@@ -229,11 +238,16 @@ const Home = () => {
   return (
     <div>
       <h3>Welcome to home</h3>
-      <FindFlight />
+      <form>
+        <input type="text" placeholder="Destination" />
+        <input type="text" placeholder="Departure" />
+        <input type="date" />
+        <input type="date" />
+        <button>Søg</button>
+      </form>
     </div>
   );
 };
-
 const FlightData = () => {
   const [flightInfo, setFlightInfo] = useState([]);
   useEffect(() => {
@@ -273,9 +287,7 @@ const FlightData = () => {
                 <td>{flight.duration} min</td>
                 <td>{flight.price} kr. </td>
                 <td>
-                  <a href={flight.deeplinkUrl} target="_blank">
-                    Link
-                  </a>
+                  <a href={flight.deeplinkUrl}>Link</a>
                 </td>
               </tr>
             );
@@ -285,92 +297,6 @@ const FlightData = () => {
     </div>
   );
 };
-
-const FindFlight = ({ flightinfo }) => {
-  const [state, setState] = useState({
-    startDate: "",
-    cabinClass: "economy",
-    destination: "",
-    adults: "1",
-    arrival: ""
-  });
-
-  function handleFindFlight(event) {
-    const value = event.target.value;
-    setState({
-      ...state,
-      [event.target.name]: value
-    });
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.name;
-    const value = event.target.value;
-    setState({
-      ...flightinfo,
-      [name]: value
-    });
-    console.log("State of input: ", state);
-    state.startDate
-      .split("-")
-      .reverse()
-      .join("-");
-    facade
-      .fetchFlightData1(
-        state.startDate,
-        state.cabinClass,
-        state.arrival,
-        state.destination,
-        state.adults
-      )
-      .then(res => {
-        console.log("result: ", res);
-      });
-  }
-
-  return (
-    <div>
-      <form>
-        <input
-          type="text"
-          name="destination"
-          placeholder="Destination"
-          onChange={handleFindFlight}
-        />
-        <input
-          type="date"
-          name="startDate"
-          onChange={handleFindFlight}
-          required
-        />
-        <input
-          type="text"
-          name="arrival"
-          placeholder="Departure"
-          onChange={handleFindFlight}
-        />
-        <input
-          type="number"
-          name="adults"
-          placeholder="1"
-          min="1"
-          size="4"
-          onChange={handleFindFlight}
-        />
-        <select name="cabinClass" onChange={handleFindFlight}>
-          <option value="economy">Economy</option>
-          <option value="premiumeconomy">Premium Economy</option>
-          <option value="business">Business</option>
-          <option value="first">First Class</option>
-        </select>
-        <button onClick={handleSubmit}>Søg</button>
-      </form>
-      <div></div>
-    </div>
-  );
-};
-
 const People = () => {
   const [dataFromServer, setDataFromServer] = useState("Fetching...");
   const [listPeople, setListPeople] = useState([]);

@@ -311,22 +311,18 @@ const FindFlight = ({ flightinfo }) => {
       ...flightinfo,
       [name]: value
     });
-    console.log("State of input: ", state);
+    console.log(state);
     state.startDate
       .split("-")
       .reverse()
       .join("-");
-    facade
-      .fetchFlightData1(
-        state.startDate,
-        state.cabinClass,
-        state.arrival,
-        state.destination,
-        state.adults
-      )
-      .then(res => {
-        console.log("result: ", res);
-      });
+    facade.fetchFlightData1(
+      state.startDate,
+      state.cabinClass,
+      state.arrival,
+      state.destination,
+      state.adults
+    );
   }
 
   return (

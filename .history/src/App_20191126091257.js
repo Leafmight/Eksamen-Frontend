@@ -311,7 +311,7 @@ const FindFlight = ({ flightinfo }) => {
       ...flightinfo,
       [name]: value
     });
-    console.log("State of input: ", state);
+    //console.log(state);
     state.startDate
       .split("-")
       .reverse()
@@ -325,7 +325,7 @@ const FindFlight = ({ flightinfo }) => {
         state.adults
       )
       .then(res => {
-        console.log("result: ", res);
+        console.log(res);
       });
   }
 

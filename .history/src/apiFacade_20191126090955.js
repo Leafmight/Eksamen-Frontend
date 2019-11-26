@@ -83,7 +83,7 @@ function apiFacade() {
   ) => {
     const options = makeOptions("GET", true); //True add's the token
     return fetch(
-      "http://localhost:8080/security/api/info/flightdata/" +
+      "http://localhost:8080/securitystarter/api/info/flightdata/" +
         startDate +
         "/" +
         cabinClass +
