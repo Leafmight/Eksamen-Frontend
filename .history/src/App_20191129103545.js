@@ -20,8 +20,10 @@ function App() {
 
   return (
     <div>
-      <HeaderStart />
-      <ContentStart login={login} />
+      <div>
+        <HeaderStart />
+        <ContentStart login={login} />
+      </div>
     </div>
   );
 }

@@ -20,8 +20,16 @@ function App() {
 
   return (
     <div>
-      <HeaderStart />
-      <ContentStart login={login} />
+      {!loggedIn ? (
+        <div>
+          <HeaderStart />
+          <ContentStart login={login} />
+        </div>
+      ) : (
+        <div>
+          <LoggedIn logout={logout} />
+        </div>
+      )}
     </div>
   );
 }
@@ -52,7 +60,26 @@ function LogIn({ login }) {
     </div>
   );
 }
+const Logout = ({ logout }) => {
+  const handleLogout = () => {
+    logout();
+  };
+  return (
+    <div>
+      <h2>Logout</h2>
+      <button onClick={handleLogout}>Logout</button>
+    </div>
+  );
+};
 
+function LoggedIn({ logout }) {
+  return (
+    <div>
+      <Header />
+      <Content logout={logout} />
+    </div>
+  );
+}
 const HeaderStart = () => {
   return (
     <ul className="header">
@@ -66,7 +93,11 @@ const HeaderStart = () => {
           README
         </NavLink>
       </li>
-
+      <li>
+        <NavLink activeClassName="active" to="/flightinfo">
+          Footballmatches
+        </NavLink>
+      </li>
       <li>
         <NavLink activeClassName="active" to="/login">
           Login
@@ -87,7 +118,106 @@ const ContentStart = ({ login, props }) => {
       <Route path="/readme">
         <Readme />
       </Route>
+      <Route path="/flightinfo">
+        <Footballmatches />
+      </Route>
+      <Route path="*">
+        <NoMatch />
+      </Route>
+    </Switch>
+  );
+};
+const Header = () => {
+  if (facade.getTokenInfo().roles === "admin") {
+    return (
+      <ul className="header">
+        <li>
+          <NavLink exact activeClassName="active" to="/">
+            Home
+          </NavLink>
+        </li>
+        <li>
+          <NavLink activeClassName="active" to="/people">
+            People
+          </NavLink>
+        </li>
+        <li>
+          <NavLink activeClassName="active" to="/readme">
+            README
+          </NavLink>
+        </li>
+        <li>
+          <NavLink activeClassName="active" to="/edit">
+            Edit
+          </NavLink>
+        </li>
+        <li>
+          <NavLink activeClassName="active" to="/logout">
+            Logout
+          </NavLink>
+        </li>
+        <li style={{ float: "right" }}>
+          <NavLink activeClassName="active" to="/user-info">
+            Hi! {facade.getTokenInfo().username} Role:{" "}
+            {facade.getTokenInfo().roles}
+          </NavLink>
+        </li>
+      </ul>
+    );
+  }
+  return (
+    <ul className="header">
+      <li>
+        <NavLink exact activeClassName="active" to="/">
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink activeClassName="active" to="/people">
+          People
+        </NavLink>
+      </li>
+      <li>
+        <NavLink activeClassName="active" to="/readme">
+          README
+        </NavLink>
+      </li>
+      <li>
+        <NavLink activeClassName="active" to="/logout">
+          Logout
+        </NavLink>
+      </li>
+      <li style={{ float: "right" }}>
+        <NavLink activeClassName="active" to="/user-info">
+          Hi! {facade.getTokenInfo().username} Role:{" "}
+          {facade.getTokenInfo().roles}
+        </NavLink>
+      </li>
+    </ul>
+  );
+};
 
+const Content = ({ logout }) => {
+  return (
+    <Switch>
+      <Route exact path="/">
+        <Home />
+      </Route>
+      <Route path="/people">
+        <People />
+      </Route>
+      <Route path="/readme">
+        <Readme />
+      </Route>
+      <Route path="/edit">
+        <Edit />
+      </Route>
+      <Route path="/logout">
+        <Logout logout={logout} />
+      </Route>
+      <Route path="/user-info">
+        <UserInfo />
+      </Route>
       <Route path="*">
         <NoMatch />
       </Route>
@@ -278,7 +408,62 @@ const Footballmatches = listMatches => {
     </div>
   );
 };
+const People = () => {
+  const [dataFromServer, setDataFromServer] = useState("Fetching...");
+  const [listPeople, setListPeople] = useState([]);
 
+  useEffect(() => {
+    facade.fetchData().then(res => setDataFromServer(res.msg));
+  }, []);
+  useEffect(() => {
+    let didCancel = false;
+    facade.fetchPeople().then(res => {
+      if (didCancel === false) {
+        setListPeople(res);
+        console.log("Fetching complete");
+        facade.fetchStuff().then(res => console.log(res));
+      }
+    });
+    return () => {
+      didCancel = true;
+    };
+  }, []);
+  return (
+    <div>
+      <h2>Data Received from server</h2>
+      <h3>{dataFromServer}</h3>
+      <p>{JSON.stringify(listPeople)}</p>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Height</th>
+            <th>Gender</th>
+          </tr>
+        </thead>
+        <tbody>
+          {listPeople.map((person, index) => {
+            return (
+              <tr key={index}>
+                <td>{person.name}</td>
+                <td>{person.height}</td>
+                <td>{person.gender}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const Edit = () => {
+  return (
+    <div>
+      <h3>Find and Edit</h3>
+    </div>
+  );
+};
 const Readme = () => {
   return (
     <div>
@@ -368,5 +553,14 @@ const Readme = () => {
   );
 };
 
+const UserInfo = () => {
+  return (
+    <div>
+      <h2>User Info</h2>
+      <li>Username: {facade.getTokenInfo().username}</li>
+      <li>Role: {facade.getTokenInfo().roles}</li>
+    </div>
+  );
+};
 const NoMatch = () => <div>No match for path</div>;
 export default App;

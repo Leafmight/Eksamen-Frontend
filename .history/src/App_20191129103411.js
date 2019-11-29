@@ -20,8 +20,16 @@ function App() {
 
   return (
     <div>
-      <HeaderStart />
-      <ContentStart login={login} />
+      {!loggedIn ? (
+        <div>
+          <HeaderStart />
+          <ContentStart login={login} />
+        </div>
+      ) : (
+        <div>
+          <LoggedIn logout={logout} />
+        </div>
+      )}
     </div>
   );
 }
@@ -52,7 +60,26 @@ function LogIn({ login }) {
     </div>
   );
 }
+const Logout = ({ logout }) => {
+  const handleLogout = () => {
+    logout();
+  };
+  return (
+    <div>
+      <h2>Logout</h2>
+      <button onClick={handleLogout}>Logout</button>
+    </div>
+  );
+};
 
+function LoggedIn({ logout }) {
+  return (
+    <div>
+      <Header />
+      <Content logout={logout} />
+    </div>
+  );
+}
 const HeaderStart = () => {
   return (
     <ul className="header">

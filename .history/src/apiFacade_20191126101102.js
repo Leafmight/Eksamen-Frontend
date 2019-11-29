@@ -63,7 +63,17 @@ function apiFacade() {
     }
     return fetch(URL + "/api/info/user", options).then(handleHttpErrors);
   };
-
+  const fetchPeople = () => {
+    const options = makeOptions("GET", true); //True add's the token
+    return fetch(URL + "/api/info/people", options).then(handleHttpErrors);
+  };
+  const fetchFlightData = () => {
+    const options = makeOptions("GET", true); //True add's the token
+    return fetch(
+      "http://localhost:8080/securitystarter/api/info/flightdata",
+      options
+    ).then(handleHttpErrors);
+  };
   const fetchFlightData1 = (
     startDate,
     cabinClass,
@@ -73,7 +83,7 @@ function apiFacade() {
   ) => {
     const options = makeOptions("GET", true); //True add's the token
     return fetch(
-      "https://leafmight.dk/security/api/info/flightdata/" +
+      "http://localhost:8080/security/api/info/flightdata/" +
         startDate +
         "/" +
         cabinClass +
@@ -87,15 +97,63 @@ function apiFacade() {
     ).then(handleHttpErrors);
   };
 
-  const fetchFootballMatches = destination => {
-    const newDestination = destination.split("-")[0];
+  const fetchStuff = () => {
     return fetch(
-      "https://sandersolutions.dk/sem3_backend/api/air/nearestmatch/" +
-        newDestination
+      "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/v1.0",
+      {
+        method: "POST",
+        headers: {
+          "x-rapidapi-host":
+            "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
+          "x-rapidapi-key": "1e16b498-3dfb-400b-8ecd-91d0f943a5a3",
+          "content-type": "application/x-www-form-urlencoded"
+        },
+        body: {
+          inboundDate: "2019-11-21",
+          cabinClass: "business",
+          children: "0",
+          infants: "0",
+          country: "US",
+          currency: "USD",
+          locale: "en-US",
+          originPlace: "SFO-sky",
+          destinationPlace: "LHR-sky",
+          outboundDate: "2019-11-22",
+          adults: "1"
+        }
+      }
     )
-      .then(handleHttpErrors)
       .then(response => {
-        return response;
+        console.log(response);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+  const fetchNew = () => {
+    return fetch(
+      "https://apidojo-hipmunk-v1.p.rapidapi.com/flights/create-session?infants_lap=0&children=0&seniors=0&country=US&from0=SGN&to0=DAD&date0=Jan%2027%202019&pax=1&cabin=Coach",
+      {
+        method: "GET",
+        headers: {
+          "x-rapidapi-host": "apidojo-hipmunk-v1.p.rapidapi.com",
+          "x-rapidapi-key": "4dfa3d7cb0msh7701660655f1502p13c7cbjsn3a351650d218"
+        }
+      }
+    )
+      .then(response => {
+        console.log(response);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+  const fetchFootballMatches = () => {
+    return fetch(
+      "https://sandersolutions.dk/sem3_backend/api/air/nearestmatch/MAN"
+    )
+      .then(response => {
+        console.log(response);
       })
       .catch(err => {
         console.log(err);
@@ -109,7 +167,10 @@ function apiFacade() {
     login,
     logout,
     fetchData,
+    fetchPeople,
     getTokenInfo,
+    fetchStuff,
+    fetchFlightData,
     fetchFlightData1,
     fetchFootballMatches
   };

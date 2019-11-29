@@ -20,8 +20,16 @@ function App() {
 
   return (
     <div>
-      <HeaderStart />
-      <ContentStart login={login} />
+      {!loggedIn ? (
+        <div>
+          <HeaderStart />
+          <ContentStart login={login} />
+        </div>
+      ) : (
+        <div>
+          <LoggedIn logout={logout} />
+        </div>
+      )}
     </div>
   );
 }

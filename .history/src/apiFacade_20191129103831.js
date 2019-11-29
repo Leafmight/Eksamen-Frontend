@@ -109,7 +109,10 @@ function apiFacade() {
     login,
     logout,
     fetchData,
+    fetchPeople,
     getTokenInfo,
+    fetchStuff,
+    fetchFlightData,
     fetchFlightData1,
     fetchFootballMatches
   };
